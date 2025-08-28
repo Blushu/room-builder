@@ -7,7 +7,7 @@ export let cameraControlsEnabled = true;
 
 // Camera state
 const cameraDefaults = {
-    position: { x: 15, y: 10, z: 15 },
+    position: { x: 15, y: 15, z: 15 },
     target: { x: 0, y: 4, z: 0 }
 };
 

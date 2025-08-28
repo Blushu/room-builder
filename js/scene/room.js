@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { defaults } from '../utils/defaults.js';
 
 // Create room geometry with walls, floor, ceiling, and holes
 export function createRoom() {
@@ -20,8 +21,13 @@ export function createRoom() {
     floor.position.y = 0;
     roomGroup.add(floor);
 
-    // Ceiling
-    const ceiling = new THREE.Mesh(floorGeometry, wallMaterial);
+    // Ceiling (invisible)
+    const ceilingMaterial = new THREE.MeshLambertMaterial({ 
+        color: 0xcccccc, 
+        transparent: true, 
+        opacity: 0 
+    });
+    const ceiling = new THREE.Mesh(floorGeometry, ceilingMaterial);
     ceiling.rotation.x = Math.PI / 2;
     ceiling.position.y = roomHeight;
     roomGroup.add(ceiling);
@@ -32,11 +38,32 @@ export function createRoom() {
     return roomGroup;
 }
 
+export function updateRoomWindows(roomGroup, windowSettings) {
+    // Remove existing walls
+    const wallsToRemove = [];
+    roomGroup.children.forEach(child => {
+        if (child.material && child.material.color && child.material.color.getHex() === 0xcccccc && child.position.y !== 0) {
+            if (child.position.z !== 0 || child.position.x !== 0) { // Not floor or ceiling
+                wallsToRemove.push(child);
+            }
+        }
+    });
+    
+    wallsToRemove.forEach(wall => roomGroup.remove(wall));
+    
+    // Update defaults with new window settings
+    Object.assign(defaults, windowSettings);
+    
+    // Recreate walls with new window dimensions
+    const wallMaterial = new THREE.MeshLambertMaterial({ color: 0xcccccc });
+    createWallsWithHoles(roomGroup, 10, 8, 10, wallMaterial);
+}
+
 function createWallsWithHoles(roomGroup, width, height, depth, material) {
-    // Hole dimensions
-    const holeWidth = 4;
-    const holeHeight = 3;
-    const holeY = 1.5; // Height from floor to bottom of hole
+    // Window dimensions from defaults
+    const holeWidth = defaults.windowWidth;
+    const holeHeight = defaults.windowHeight;
+    const holeY = defaults.windowPositionY; // Height from floor to bottom of hole
 
     // Front wall with hole
     const frontWallShape = new THREE.Shape();
