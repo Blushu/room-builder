@@ -39,13 +39,11 @@ export function createRoom() {
 }
 
 export function updateRoomWindows(roomGroup, windowSettings) {
-    // Remove existing walls
+    // Remove existing walls by checking for ExtrudeGeometry (walls are extruded, floor/ceiling are not)
     const wallsToRemove = [];
     roomGroup.children.forEach(child => {
-        if (child.material && child.material.color && child.material.color.getHex() === 0xcccccc && child.position.y !== 0) {
-            if (child.position.z !== 0 || child.position.x !== 0) { // Not floor or ceiling
-                wallsToRemove.push(child);
-            }
+        if (child.geometry && child.geometry.type === 'ExtrudeGeometry') {
+            wallsToRemove.push(child);
         }
     });
     
@@ -76,11 +74,12 @@ function createWallsWithHoles(roomGroup, width, height, depth, material) {
 
     // Create hole in back left wall
     const backLeftHole = new THREE.Path();
-    backLeftHole.moveTo(depth/2 - holeWidth/2, holeY);
-    backLeftHole.lineTo(depth/2 + holeWidth/2, holeY);
-    backLeftHole.lineTo(depth/2 + holeWidth/2, holeY + holeHeight);
-    backLeftHole.lineTo(depth/2 - holeWidth/2, holeY + holeHeight);
-    backLeftHole.lineTo(depth/2 - holeWidth/2, holeY);
+    const leftHoleX = depth/2 + defaults.windowPositionX;
+    backLeftHole.moveTo(leftHoleX - holeWidth/2, holeY);
+    backLeftHole.lineTo(leftHoleX + holeWidth/2, holeY);
+    backLeftHole.lineTo(leftHoleX + holeWidth/2, holeY + holeHeight);
+    backLeftHole.lineTo(leftHoleX - holeWidth/2, holeY + holeHeight);
+    backLeftHole.lineTo(leftHoleX - holeWidth/2, holeY);
     backLeftWallShape.holes.push(backLeftHole);
 
     const backLeftWallGeometry = new THREE.ExtrudeGeometry(backLeftWallShape, {
@@ -104,11 +103,12 @@ function createWallsWithHoles(roomGroup, width, height, depth, material) {
 
     // Create hole in back right wall
     const backRightHole = new THREE.Path();
-    backRightHole.moveTo(depth/2 - holeWidth/2, holeY);
-    backRightHole.lineTo(depth/2 + holeWidth/2, holeY);
-    backRightHole.lineTo(depth/2 + holeWidth/2, holeY + holeHeight);
-    backRightHole.lineTo(depth/2 - holeWidth/2, holeY + holeHeight);
-    backRightHole.lineTo(depth/2 - holeWidth/2, holeY);
+    const rightHoleX = depth/2 + defaults.windowPositionX;
+    backRightHole.moveTo(rightHoleX - holeWidth/2, holeY);
+    backRightHole.lineTo(rightHoleX + holeWidth/2, holeY);
+    backRightHole.lineTo(rightHoleX + holeWidth/2, holeY + holeHeight);
+    backRightHole.lineTo(rightHoleX - holeWidth/2, holeY + holeHeight);
+    backRightHole.lineTo(rightHoleX - holeWidth/2, holeY);
     backRightWallShape.holes.push(backRightHole);
 
     const backRightWallGeometry = new THREE.ExtrudeGeometry(backRightWallShape, {
