@@ -17,9 +17,9 @@ export const defaults = {
     windowPositionY: 1.5,
     windowPositionZ: 0,
     // Wall label settings
-    showWallLabels: true,
+    showWallLabels: false,
     labelOffsetX: 0,
-    labelOffsetY: 0,
+    labelOffsetY: 3,
     labelOffsetZ: 0
 };
 

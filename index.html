@@ -176,6 +176,32 @@
             </details>
         </div>
     </div>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.158.0/build/three.module.js"
+        }
+    }
+    </script>
     <script type="module" src="js/main.js"></script>
+    <script>
+        // Accordion behavior for control sections
+        document.addEventListener('DOMContentLoaded', () => {
+            const detailsElements = document.querySelectorAll('.lr-control-section');
+            
+            detailsElements.forEach(details => {
+                details.addEventListener('toggle', (e) => {
+                    if (e.target.open) {
+                        // Close all other details elements
+                        detailsElements.forEach(otherDetails => {
+                            if (otherDetails !== e.target && otherDetails.open) {
+                                otherDetails.open = false;
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
