@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { defaults } from '../utils/defaults.js';
 
 // Create room geometry with walls, floor, ceiling, and holes
 export function createRoom() {
@@ -20,8 +21,13 @@ export function createRoom() {
     floor.position.y = 0;
     roomGroup.add(floor);
 
-    // Ceiling
-    const ceiling = new THREE.Mesh(floorGeometry, wallMaterial);
+    // Ceiling (invisible)
+    const ceilingMaterial = new THREE.MeshLambertMaterial({ 
+        color: 0xcccccc, 
+        transparent: true, 
+        opacity: 0 
+    });
+    const ceiling = new THREE.Mesh(floorGeometry, ceilingMaterial);
     ceiling.rotation.x = Math.PI / 2;
     ceiling.position.y = roomHeight;
     roomGroup.add(ceiling);
@@ -32,69 +38,89 @@ export function createRoom() {
     return roomGroup;
 }
 
+export function updateRoomWindows(roomGroup, windowSettings) {
+    // Remove existing walls by checking for ExtrudeGeometry (walls are extruded, floor/ceiling are not)
+    const wallsToRemove = [];
+    roomGroup.children.forEach(child => {
+        if (child.geometry && child.geometry.type === 'ExtrudeGeometry') {
+            wallsToRemove.push(child);
+        }
+    });
+    
+    wallsToRemove.forEach(wall => roomGroup.remove(wall));
+    
+    // Update defaults with new window settings
+    Object.assign(defaults, windowSettings);
+    
+    // Recreate walls with new window dimensions
+    const wallMaterial = new THREE.MeshLambertMaterial({ color: 0xcccccc });
+    createWallsWithHoles(roomGroup, 10, 8, 10, wallMaterial);
+}
+
 function createWallsWithHoles(roomGroup, width, height, depth, material) {
-    // Hole dimensions
-    const holeWidth = 4;
-    const holeHeight = 3;
-    const holeY = 1.5; // Height from floor to bottom of hole
+    // Window dimensions from defaults
+    const holeWidth = defaults.windowWidth;
+    const holeHeight = defaults.windowHeight;
+    const holeY = defaults.windowPositionY; // Height from floor to bottom of hole
+    const wallThickness = 1;
 
-    // Front wall with hole
-    const frontWallShape = new THREE.Shape();
-    frontWallShape.moveTo(-width/2, 0);
-    frontWallShape.lineTo(width/2, 0);
-    frontWallShape.lineTo(width/2, height);
-    frontWallShape.lineTo(-width/2, height);
-    frontWallShape.lineTo(-width/2, 0);
+    // Back left wall with hole (visible) - thick wall
+    const backLeftWallShape = new THREE.Shape();
+    backLeftWallShape.moveTo(0, 0);
+    backLeftWallShape.lineTo(depth, 0);
+    backLeftWallShape.lineTo(depth, height);
+    backLeftWallShape.lineTo(0, height);
+    backLeftWallShape.lineTo(0, 0);
 
-    // Create hole in front wall
-    const frontHole = new THREE.Path();
-    frontHole.moveTo(-holeWidth/2, holeY);
-    frontHole.lineTo(holeWidth/2, holeY);
-    frontHole.lineTo(holeWidth/2, holeY + holeHeight);
-    frontHole.lineTo(-holeWidth/2, holeY + holeHeight);
-    frontHole.lineTo(-holeWidth/2, holeY);
-    frontWallShape.holes.push(frontHole);
+    // Create hole in back left wall
+    const backLeftHole = new THREE.Path();
+    const leftHoleX = depth/2 + defaults.windowPositionX;
+    backLeftHole.moveTo(leftHoleX - holeWidth/2, holeY);
+    backLeftHole.lineTo(leftHoleX + holeWidth/2, holeY);
+    backLeftHole.lineTo(leftHoleX + holeWidth/2, holeY + holeHeight);
+    backLeftHole.lineTo(leftHoleX - holeWidth/2, holeY + holeHeight);
+    backLeftHole.lineTo(leftHoleX - holeWidth/2, holeY);
+    backLeftWallShape.holes.push(backLeftHole);
 
-    const frontWallGeometry = new THREE.ShapeGeometry(frontWallShape);
-    const frontWall = new THREE.Mesh(frontWallGeometry, material);
-    frontWall.position.z = depth/2;
-    roomGroup.add(frontWall);
+    const backLeftWallGeometry = new THREE.ExtrudeGeometry(backLeftWallShape, {
+        depth: wallThickness,
+        bevelEnabled: false
+    });
+    const backLeftWall = new THREE.Mesh(backLeftWallGeometry, material);
+    backLeftWall.rotation.y = Math.PI / 2;
+    backLeftWall.position.x = -width/2;
+    backLeftWall.position.z = width/2;
+    backLeftWall.position.y = 0;
+    roomGroup.add(backLeftWall);
 
-    // Back wall with hole
-    const backWallShape = new THREE.Shape();
-    backWallShape.moveTo(-width/2, 0);
-    backWallShape.lineTo(width/2, 0);
-    backWallShape.lineTo(width/2, height);
-    backWallShape.lineTo(-width/2, height);
-    backWallShape.lineTo(-width/2, 0);
+    // Back right wall with hole (visible) - thick wall
+    const backRightWallShape = new THREE.Shape();
+    backRightWallShape.moveTo(0, 0);
+    backRightWallShape.lineTo(depth, 0);
+    backRightWallShape.lineTo(depth, height);
+    backRightWallShape.lineTo(0, height);
+    backRightWallShape.lineTo(0, 0);
 
-    // Create hole in back wall
-    const backHole = new THREE.Path();
-    backHole.moveTo(-holeWidth/2, holeY);
-    backHole.lineTo(holeWidth/2, holeY);
-    backHole.lineTo(holeWidth/2, holeY + holeHeight);
-    backHole.lineTo(-holeWidth/2, holeY + holeHeight);
-    backHole.lineTo(-holeWidth/2, holeY);
-    backWallShape.holes.push(backHole);
+    // Create hole in back right wall
+    const backRightHole = new THREE.Path();
+    const rightHoleX = depth/2 + defaults.windowPositionX;
+    backRightHole.moveTo(rightHoleX - holeWidth/2, holeY);
+    backRightHole.lineTo(rightHoleX + holeWidth/2, holeY);
+    backRightHole.lineTo(rightHoleX + holeWidth/2, holeY + holeHeight);
+    backRightHole.lineTo(rightHoleX - holeWidth/2, holeY + holeHeight);
+    backRightHole.lineTo(rightHoleX - holeWidth/2, holeY);
+    backRightWallShape.holes.push(backRightHole);
 
-    const backWallGeometry = new THREE.ShapeGeometry(backWallShape);
-    const backWall = new THREE.Mesh(backWallGeometry, material);
-    backWall.position.z = -depth/2;
-    backWall.rotation.y = Math.PI;
-    roomGroup.add(backWall);
+    const backRightWallGeometry = new THREE.ExtrudeGeometry(backRightWallShape, {
+        depth: wallThickness,
+        bevelEnabled: false
+    });
+    const backRightWall = new THREE.Mesh(backRightWallGeometry, material);
+    // backRightWall.rotation.y = Math.PI / 2;
+    backRightWall.position.x = -width/2;
+    backRightWall.position.z = -width/2;
+    backRightWall.position.y = 0;
+    roomGroup.add(backRightWall);
 
-    // Left wall (solid)
-    const leftWallGeometry = new THREE.PlaneGeometry(depth, height);
-    const leftWall = new THREE.Mesh(leftWallGeometry, material);
-    leftWall.rotation.y = Math.PI / 2;
-    leftWall.position.x = -width/2;
-    leftWall.position.y = height/2;
-    roomGroup.add(leftWall);
-
-    // Right wall (solid)
-    const rightWall = new THREE.Mesh(leftWallGeometry, material);
-    rightWall.rotation.y = -Math.PI / 2;
-    rightWall.position.x = width/2;
-    rightWall.position.y = height/2;
-    roomGroup.add(rightWall);
+    // Front left and front right walls are hidden (not created)
 }

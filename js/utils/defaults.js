@@ -9,7 +9,18 @@ export const defaults = {
     ambientIntensity: 0.4,
     directionalIntensity: 1.0,
     pointIntensity: 0.8,
-    showArcPath: true
+    showArcPath: true,
+    // Window settings
+    windowWidth: 4,
+    windowHeight: 3,
+    windowPositionX: 0,
+    windowPositionY: 1.5,
+    windowPositionZ: 0,
+    // Wall label settings
+    showWallLabels: true,
+    labelOffsetX: 0,
+    labelOffsetY: 0,
+    labelOffsetZ: 0
 };
 
 // Constants

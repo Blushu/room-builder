@@ -104,10 +104,55 @@
                     </div>
                     <div class="lr-control-group">
                         <label class="lr-control-group__label" for="enableCameraControls">Enable Camera Controls:</label>
-                        <input class="lr-checkbox" type="checkbox" id="enableCameraControls" checked>
+                        <input class="lr-checkbox" type="checkbox" id="enableCameraControls">
                     </div>
                     <div class="lr-control-group">
                         <button class="lr-btn lr-btn--secondary" id="resetCameraBtn">Reset Camera Position</button>
+                    </div>
+                </div>
+            </details>
+
+            <details class="lr-control-section">
+                <summary class="lr-control-section__summary">Window Settings</summary>
+                <div class="lr-control-section__content">
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="windowWidth">Window Width:</label>
+                        <input class="lr-slider" type="range" id="windowWidth" min="1" max="8" step="0.5" value="4">
+                        <span class="lr-control-group__value" id="windowWidthValue">4.0</span>
+                    </div>
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="windowHeight">Window Height:</label>
+                        <input class="lr-slider" type="range" id="windowHeight" min="1" max="6" step="0.5" value="3">
+                        <span class="lr-control-group__value" id="windowHeightValue">3.0</span>
+                    </div>
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="windowPositionX">Window Position X:</label>
+                        <input class="lr-slider" type="range" id="windowPositionX" min="-3" max="3" step="0.5" value="0">
+                        <span class="lr-control-group__value" id="windowPositionXValue">0.0</span>
+                    </div>
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="windowPositionY">Window Position Y:</label>
+                        <input class="lr-slider" type="range" id="windowPositionY" min="0.5" max="5" step="0.5" value="1.5">
+                        <span class="lr-control-group__value" id="windowPositionYValue">1.5</span>
+                    </div>
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="showWallLabels">Show Wall Labels:</label>
+                        <input class="lr-checkbox" type="checkbox" id="showWallLabels" checked>
+                    </div>
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="labelOffsetX">Label Offset X:</label>
+                        <input class="lr-slider" type="range" id="labelOffsetX" min="-5" max="5" step="0.5" value="0">
+                        <span class="lr-control-group__value" id="labelOffsetXValue">0.0</span>
+                    </div>
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="labelOffsetY">Label Offset Y:</label>
+                        <input class="lr-slider" type="range" id="labelOffsetY" min="-3" max="3" step="0.5" value="0">
+                        <span class="lr-control-group__value" id="labelOffsetYValue">0.0</span>
+                    </div>
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="labelOffsetZ">Label Offset Z:</label>
+                        <input class="lr-slider" type="range" id="labelOffsetZ" min="-5" max="5" step="0.5" value="0">
+                        <span class="lr-control-group__value" id="labelOffsetZValue">0.0</span>
                     </div>
                 </div>
             </details>
