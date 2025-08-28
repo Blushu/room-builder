@@ -1,0 +1,26 @@
+/* Dark Theme Overrides */
+:root {
+    /* Enhanced dark theme colors */
+    --bg-primary: #1a1a1a;
+    --bg-secondary: rgba(0, 0, 0, 0.9);
+    --bg-tertiary: rgba(0, 0, 0, 0.4);
+    --text-primary: #fff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --accent-primary: rgba(78, 205, 196, 0.9);
+    --accent-secondary: rgba(255, 107, 107, 0.9);
+    --border-color: rgba(255, 255, 255, 0.15);
+    --shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Dark theme specific adjustments */
+.control-section summary:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+input[type="range"]::-webkit-slider-track {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+input[type="range"]::-moz-range-track {
+    background: rgba(255, 255, 255, 0.2);
+}

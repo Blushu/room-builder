@@ -1,0 +1,115 @@
+/* CSS Custom Properties (Variables) */
+:root {
+    --bg-primary: #222222;
+    --bg-secondary: rgba(0, 0, 0, 0.8);
+    --bg-tertiary: rgba(0, 0, 0, 0.3);
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+    --accent-primary: rgba(78, 205, 196, 0.8);
+    --accent-secondary: rgba(255, 107, 107, 0.8);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --border-radius: 4px;
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 20px;
+}
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    overflow: hidden;
+}
+
+/* BEM: App Block */
+.lr-app {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+/* BEM: Controls Block */
+.lr-controls {
+    position: absolute;
+    top: var(--spacing-xl);
+    right: var(--spacing-xl);
+    width: 280px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+    cursor: grab;
+    user-select: none;
+    z-index: 1000;
+}
+
+.lr-controls:active {
+    cursor: grabbing;
+}
+
+.lr-controls__title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    color: var(--text-primary);
+}
+
+/* BEM: Control Group Block */
+.lr-control-group {
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+}
+
+.lr-control-group:last-child {
+    margin-bottom: 0;
+}
+
+.lr-control-group__label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xs);
+    display: block;
+}
+
+.lr-control-group__value {
+    font-size: 0.85rem;
+    color: var(--accent-primary);
+    font-weight: 600;
+    text-align: right;
+    min-width: 50px;
+}
+
+/* BEM: Radio Group Block */
+.lr-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.lr-radio-group__item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.lr-radio-group__label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin: 0;
+}

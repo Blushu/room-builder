@@ -1,0 +1,36 @@
+/* BEM: Saved Rooms Block */
+.lr-saved-rooms {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--bg-tertiary);
+}
+
+.lr-saved-rooms__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+    transition: background 0.2s ease;
+}
+
+.lr-saved-rooms__item:last-child {
+    border-bottom: none;
+}
+
+.lr-saved-rooms__item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.lr-saved-rooms__name {
+    cursor: pointer;
+    flex: 1;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.lr-saved-rooms__name:hover {
+    color: var(--accent-primary);
+}

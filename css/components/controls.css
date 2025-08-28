@@ -1,0 +1,33 @@
+/* BEM: Control Section Block */
+.lr-control-section {
+    margin-bottom: var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--bg-tertiary);
+}
+
+.lr-control-section:last-child {
+    margin-bottom: 0;
+}
+
+.lr-control-section__summary {
+    padding: var(--spacing-sm) var(--spacing-md);
+    cursor: pointer;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    transition: background 0.2s ease;
+}
+
+.lr-control-section__summary:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.lr-control-section--open .lr-control-section__summary {
+    border-bottom: 1px solid var(--border-color);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.lr-control-section__content {
+    padding: var(--spacing-md);
+}

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lighting Room - Three.js</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/layout/canvas.css">
+    <link rel="stylesheet" href="css/layout/panels.css">
+    <link rel="stylesheet" href="css/components/controls.css">
+    <link rel="stylesheet" href="css/components/sliders.css">
+    <link rel="stylesheet" href="css/components/buttons.css">
+    <link rel="stylesheet" href="css/components/dropdowns.css">
+    <link rel="stylesheet" href="css/themes/dark.css">
+</head>
+<body>
+    <div class="lr-app">
+        <canvas class="lr-canvas"></canvas>
+        <div class="lr-controls">
+            <h2 class="lr-controls__title">Lighting Controls</h2>
+            
+            <details class="lr-control-section lr-control-section--open" open>
+                <summary class="lr-control-section__summary">Arc Position</summary>
+                <div class="lr-control-section__content">
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="lightPosition">Light Position:</label>
+                        <input class="lr-slider" type="range" id="lightPosition" min="0" max="100" step="0.1" value="50">
+                        <span class="lr-control-group__value" id="positionValue">50.0%</span>
+                    </div>
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="arcLength">Arc Length:</label>
+                        <input class="lr-slider" type="range" id="arcLength" min="30" max="360" step="10" value="180">
+                        <span class="lr-control-group__value" id="arcValue">180°</span>
+                    </div>
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="arcRotation">Arc Rotation:</label>
+                        <input class="lr-slider" type="range" id="arcRotation" min="135" max="315" step="15" value="225">
+                        <span class="lr-control-group__value" id="rotationValue">225°</span>
+                    </div>
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="showPath">Show Light Path:</label>
+                        <input class="lr-checkbox" type="checkbox" id="showPath" checked>
+                    </div>
+                </div>
+            </details>
+
+            <details class="lr-control-section">
+                <summary class="lr-control-section__summary">Arc Center</summary>
+                <div class="lr-control-section__content">
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="arcCenterX">Arc Center X:</label>
+                        <input class="lr-slider" type="range" id="arcCenterX" min="-10" max="10" step="0.5" value="0">
+                        <span class="lr-control-group__value" id="centerXValue">0.0</span>
+                    </div>
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="arcCenterY">Arc Center Y:</label>
+                        <input class="lr-slider" type="range" id="arcCenterY" min="0" max="10" step="0.5" value="5">
+                        <span class="lr-control-group__value" id="centerYValue">5.0</span>
+                    </div>
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="arcCenterZ">Arc Center Z:</label>
+                        <input class="lr-slider" type="range" id="arcCenterZ" min="-10" max="10" step="0.5" value="0">
+                        <span class="lr-control-group__value" id="centerZValue">0.0</span>
+                    </div>
+                </div>
+            </details>
+
+            <details class="lr-control-section">
+                <summary class="lr-control-section__summary">Light Intensity</summary>
+                <div class="lr-control-section__content">
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="ambientIntensity">Ambient Light:</label>
+                        <input class="lr-slider" type="range" id="ambientIntensity" min="0" max="1" step="0.1" value="0.4">
+                        <span class="lr-control-group__value" id="ambientValue">0.4</span>
+                    </div>
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="directionalIntensity">Directional Light:</label>
+                        <input class="lr-slider" type="range" id="directionalIntensity" min="0" max="2" step="0.1" value="1">
+                        <span class="lr-control-group__value" id="directionalValue">1.0</span>
+                    </div>
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="pointIntensity">Point Light:</label>
+                        <input class="lr-slider" type="range" id="pointIntensity" min="0" max="2" step="0.1" value="0.8">
+                        <span class="lr-control-group__value" id="pointValue">0.8</span>
+                    </div>
+                </div>
+            </details>
+
+            <details class="lr-control-section">
+                <summary class="lr-control-section__summary">Camera Controls</summary>
+                <div class="lr-control-section__content">
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label">Camera Mode:</label>
+                        <div class="lr-radio-group">
+                            <label class="lr-radio-group__item">
+                                <input class="lr-radio" type="radio" name="cameraMode" value="orbit" checked>
+                                <span class="lr-radio-group__label">Orbit (rotate around center)</span>
+                            </label>
+                            <label class="lr-radio-group__item">
+                                <input class="lr-radio" type="radio" name="cameraMode" value="pan">
+                                <span class="lr-radio-group__label">Pan (move in camera plane)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="enableCameraControls">Enable Camera Controls:</label>
+                        <input class="lr-checkbox" type="checkbox" id="enableCameraControls" checked>
+                    </div>
+                    <div class="lr-control-group">
+                        <button class="lr-btn lr-btn--secondary" id="resetCameraBtn">Reset Camera Position</button>
+                    </div>
+                </div>
+            </details>
+
+            <details class="lr-control-section">
+                <summary class="lr-control-section__summary">Save/Load Rooms</summary>
+                <div class="lr-control-section__content">
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label" for="stateNameInput">Room Name:</label>
+                        <input class="lr-input" type="text" id="stateNameInput" placeholder="Enter room name...">
+                        <button class="lr-btn lr-btn--primary" id="saveStateBtn">Save Current Room</button>
+                    </div>
+                    <div class="lr-control-group">
+                        <button class="lr-btn lr-btn--secondary" id="resetBtn">Reset to Defaults</button>
+                    </div>
+                    <div class="lr-control-group">
+                        <label class="lr-control-group__label">Saved Rooms:</label>
+                        <div class="lr-saved-rooms" id="savedStatesList"></div>
+                    </div>
+                </div>
+            </details>
+        </div>
+    </div>
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>

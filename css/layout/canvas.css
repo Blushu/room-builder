@@ -1,0 +1,20 @@
+/* BEM: Canvas Block */
+.lr-canvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    background: var(--bg-primary);
+    cursor: crosshair;
+}
+
+.lr-canvas:active {
+    cursor: grabbing;
+}
+
+.lr-canvas--disabled {
+    cursor: default;
+}
+
+.lr-canvas--disabled:active {
+    cursor: default;
+}
