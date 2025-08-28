@@ -116,7 +116,6 @@ function createWallsWithHoles(roomGroup, width, height, depth, material) {
         bevelEnabled: false
     });
     const backRightWall = new THREE.Mesh(backRightWallGeometry, material);
-    // backRightWall.rotation.y = Math.PI / 2;
     backRightWall.position.x = -width/2;
     backRightWall.position.z = -width/2;
     backRightWall.position.y = 0;
