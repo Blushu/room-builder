@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { defaults } from './utils/defaults.js';
 import { createRoom, updateRoomWindows } from './scene/room.js';
 import { createLighting } from './scene/lighting.js';
 import { createCamera, setupCameraControls } from './scene/camera.js';
@@ -29,7 +30,7 @@ const lighting = createLighting(scene);
 const camera = createCamera(canvas);
 
 // Initialize wall labels
-initWallLabels(camera);
+initWallLabels(camera, scene);
 createWallLabels(scene);
 
 // Setup controls
@@ -44,8 +45,8 @@ initWindowControls((windowSettings) => {
 });
 
 // Initialize arc path and light position
-createArcPath(scene, 360);
-updateLightPosition(50, 360);
+createArcPath(scene, defaults.arcLength);
+updateLightPosition(defaults.lightPosition, defaults.arcLength);
 
 // Initialize saved rooms list
 updateSavedRoomsList();

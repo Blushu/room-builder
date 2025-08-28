@@ -15,7 +15,12 @@ export const defaults = {
     windowHeight: 3,
     windowPositionX: 0,
     windowPositionY: 1.5,
-    windowPositionZ: 0
+    windowPositionZ: 0,
+    // Wall label settings
+    showWallLabels: true,
+    labelOffsetX: 0,
+    labelOffsetY: 0,
+    labelOffsetZ: 0
 };
 
 // Constants

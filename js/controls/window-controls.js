@@ -1,4 +1,5 @@
 import { defaults } from '../utils/defaults.js';
+import { toggleWallLabels, updateLabelOffsets } from '../features/wall-labels.js';
 
 // Window control elements
 let windowControls = {};
@@ -13,12 +14,19 @@ export function initWindowControls(onWindowChange) {
         windowHeight: document.getElementById('windowHeight'),
         windowPositionX: document.getElementById('windowPositionX'),
         windowPositionY: document.getElementById('windowPositionY'),
+        showWallLabels: document.getElementById('showWallLabels'),
+        labelOffsetX: document.getElementById('labelOffsetX'),
+        labelOffsetY: document.getElementById('labelOffsetY'),
+        labelOffsetZ: document.getElementById('labelOffsetZ'),
         
         // Value display elements
         windowWidthValue: document.getElementById('windowWidthValue'),
         windowHeightValue: document.getElementById('windowHeightValue'),
         windowPositionXValue: document.getElementById('windowPositionXValue'),
-        windowPositionYValue: document.getElementById('windowPositionYValue')
+        windowPositionYValue: document.getElementById('windowPositionYValue'),
+        labelOffsetXValue: document.getElementById('labelOffsetXValue'),
+        labelOffsetYValue: document.getElementById('labelOffsetYValue'),
+        labelOffsetZValue: document.getElementById('labelOffsetZValue')
     };
 
     // Set initial values from defaults
@@ -26,6 +34,10 @@ export function initWindowControls(onWindowChange) {
     windowControls.windowHeight.value = defaults.windowHeight;
     windowControls.windowPositionX.value = defaults.windowPositionX;
     windowControls.windowPositionY.value = defaults.windowPositionY;
+    windowControls.showWallLabels.checked = defaults.showWallLabels;
+    windowControls.labelOffsetX.value = defaults.labelOffsetX;
+    windowControls.labelOffsetY.value = defaults.labelOffsetY;
+    windowControls.labelOffsetZ.value = defaults.labelOffsetZ;
 
     // Update displays
     updateWindowDisplays();
@@ -34,12 +46,25 @@ export function initWindowControls(onWindowChange) {
     Object.keys(windowControls).forEach(key => {
         if (key.includes('Value')) return; // Skip value display elements
         
-        windowControls[key].addEventListener('input', (event) => {
-            updateWindowDisplays();
-            if (onWindowChangeCallback) {
-                onWindowChangeCallback(getWindowSettings());
-            }
-        });
+        if (key === 'showWallLabels') {
+            windowControls[key].addEventListener('change', (event) => {
+                toggleWallLabels(event.target.checked);
+            });
+        } else if (key.startsWith('labelOffset')) {
+            windowControls[key].addEventListener('input', (event) => {
+                const offsetType = key.replace('labelOffset', '').toLowerCase();
+                defaults[key] = parseFloat(event.target.value);
+                updateWindowDisplays();
+                updateLabelOffsets();
+            });
+        } else {
+            windowControls[key].addEventListener('input', (event) => {
+                updateWindowDisplays();
+                if (onWindowChangeCallback) {
+                    onWindowChangeCallback(getWindowSettings());
+                }
+            });
+        }
     });
 }
 
@@ -48,6 +73,9 @@ function updateWindowDisplays() {
     windowControls.windowHeightValue.textContent = parseFloat(windowControls.windowHeight.value).toFixed(1);
     windowControls.windowPositionXValue.textContent = parseFloat(windowControls.windowPositionX.value).toFixed(1);
     windowControls.windowPositionYValue.textContent = parseFloat(windowControls.windowPositionY.value).toFixed(1);
+    windowControls.labelOffsetXValue.textContent = parseFloat(windowControls.labelOffsetX.value).toFixed(1);
+    windowControls.labelOffsetYValue.textContent = parseFloat(windowControls.labelOffsetY.value).toFixed(1);
+    windowControls.labelOffsetZValue.textContent = parseFloat(windowControls.labelOffsetZ.value).toFixed(1);
 }
 
 export function getWindowSettings() {

@@ -1,33 +1,42 @@
 import * as THREE from 'three';
+import { defaults } from '../utils/defaults.js';
 
 // Wall labels system
 let wallLabels = [];
 let camera = null;
+let scene = null;
 
-export function initWallLabels(sceneCamera) {
+export function initWallLabels(sceneCamera, sceneRef) {
     camera = sceneCamera;
+    scene = sceneRef;
 }
 
-export function createWallLabels(scene) {
+export function createWallLabels(sceneRef) {
+    if (sceneRef) scene = sceneRef;
+    
     // Clear existing labels
     wallLabels.forEach(label => scene.remove(label.group));
     wallLabels = [];
 
+    if (!defaults.showWallLabels) return;
+
     const walls = [
-        { name: 'Front Left Wall', position: { x: 0, y: 4, z: 5 }, color: 0x4CAF50 },
-        { name: 'Back Right Wall', position: { x: 0, y: 4, z: -5 }, color: 0x2196F3 },
-        { name: 'Back Left Wall', position: { x: -5, y: 4, z: 0 }, color: 0xFF9800 },
-        { name: 'Front Right Wall', position: { x: 5, y: 4, z: 0 }, color: 0x9C27B0 }
+        { name: 'Back Left Wall', position: { x: -4, y: 5, z: -2.5 }, color: 0xFF9800 },
+        { name: 'Back Right Wall', position: { x: 4, y: 5, z: -2.5 }, color: 0x9C27B0 }
     ];
 
     walls.forEach(wall => {
         const labelGroup = createSpeechBubbleLabel(wall.name, wall.color);
-        labelGroup.position.set(wall.position.x, wall.position.y, wall.position.z);
+        labelGroup.position.set(
+            wall.position.x + defaults.labelOffsetX, 
+            wall.position.y + defaults.labelOffsetY, 
+            wall.position.z + defaults.labelOffsetZ
+        );
         scene.add(labelGroup);
         
         wallLabels.push({
             group: labelGroup,
-            position: wall.position
+            basePosition: wall.position
         });
     });
 }
@@ -90,14 +99,46 @@ function createSpeechBubbleLabel(text, color) {
 }
 
 export function updateWallLabels() {
-    if (!camera) return;
+    if (!camera || !defaults.showWallLabels) return;
 
     wallLabels.forEach(label => {
         // Make labels always face the camera
         label.group.lookAt(camera.position);
         
-        // Add slight floating animation
+        // Update position with offsets and floating animation
         const time = Date.now() * 0.001;
-        label.group.position.y = label.position.y + Math.sin(time + label.position.x) * 0.1;
+        const floatingOffset = Math.sin(time + label.basePosition.x) * 0.1;
+        
+        label.group.position.set(
+            label.basePosition.x + defaults.labelOffsetX,
+            label.basePosition.y + defaults.labelOffsetY + floatingOffset,
+            label.basePosition.z + defaults.labelOffsetZ
+        );
+    });
+}
+
+export function toggleWallLabels(show) {
+    defaults.showWallLabels = show;
+    
+    if (show) {
+        createWallLabels();
+    } else {
+        // Hide existing labels
+        wallLabels.forEach(label => {
+            if (scene && label.group) {
+                scene.remove(label.group);
+            }
+        });
+        wallLabels = [];
+    }
+}
+
+export function updateLabelOffsets() {
+    wallLabels.forEach(label => {
+        label.group.position.set(
+            label.basePosition.x + defaults.labelOffsetX,
+            label.basePosition.y + defaults.labelOffsetY,
+            label.basePosition.z + defaults.labelOffsetZ
+        );
     });
 }
